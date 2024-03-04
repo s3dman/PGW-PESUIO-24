@@ -9,8 +9,8 @@ Open for submissions by students who have taken up **PIXELS GONE WILD** Course u
 
 ## Author
 
-1. [Neville JS](https://github.com/s3dman)
+* [Neville JS](https://github.com/s3dman)
 
 ## Attribution and Links
 
-1. [PESU I/O](https://pesu.io/courses)
+* [PESU I/O](https://pesu.io/courses)
