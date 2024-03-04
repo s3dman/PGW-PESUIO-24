@@ -1,4 +1,4 @@
-<img src="https://imgur.com/9FMBdBj"></img>
+<img src="https://i.imgur.com/9FMBdBj.png"></img>
 
 # PIXELS GONE WILD: Graphics Programming with WebGL
 
