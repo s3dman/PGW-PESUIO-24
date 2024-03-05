@@ -13,18 +13,17 @@ const gl = WebGLDebugUtils.makeDebugContext(canvas.getContext("webgl2"));
 if (gl === null) {
 	alert("Unable to initialize WebGL.");
 } else {
-	gl.clearColor(0, 0, 0, 1);
-
 	// SHADER
 	const globalShader = new Shader(gl);
 	globalShader.createShaders(vertexShaderSource, fragmentShaderSource);
 
 	// DATA
 	const triangle = new Triangle(gl);
-	triangle.setupGeometry();
+	triangle.setup();
 
 	gl.useProgram(globalShader.program);
 
+	gl.clearColor(0, 0, 0, 1);
 	function renderLoop() {
 		// RENDER
 		gl.clear(gl.COLOR_BUFFER_BIT);

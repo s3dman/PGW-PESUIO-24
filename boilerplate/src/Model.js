@@ -5,7 +5,7 @@ export default class Model {
 }
 
 export class Triangle extends Model {
-	setupGeometry() {
+	setup() {
 		const data = new Float32Array([
 			-0.2, -0.2, 0.0, 0.0, 0.0, 1.0, 0.2, -0.2, 0.0, 0.0, 1.0, 0.0, 0.0,
 			0.2, 0.0, 1.0, 0.0, 0.0,
@@ -25,6 +25,7 @@ export class Triangle extends Model {
 		this.gl.enableVertexAttribArray(1);
 		this.gl.vertexAttribPointer(1, 3, this.gl.FLOAT, false, 24, 12);
 	}
+
 	render() {
 		this.gl.bindVertexArray(this.vao);
 		this.gl.drawArrays(this.gl.TRIANGLES, 0, 3);
