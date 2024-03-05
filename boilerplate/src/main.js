@@ -23,7 +23,8 @@ if (gl === null) {
 	const triangle = new Triangle(gl);
 	triangle.setupGeometry();
 
-	globalShader.useProgram();
+	gl.useProgram(globalShader.program);
+
 	function renderLoop() {
 		// RENDER
 		gl.clear(gl.COLOR_BUFFER_BIT);

@@ -39,8 +39,4 @@ export default class Shader {
 
 		return shader;
 	}
-
-	useProgram() {
-		this.gl.useProgram(this.program);
-	}
 }
