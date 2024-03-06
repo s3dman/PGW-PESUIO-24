@@ -36,6 +36,7 @@ if (gl === null) {
 	gl.clearColor(0, 0, 0, 1);
 	function renderLoop() {
 		gl.clear(gl.COLOR_BUFFER_BIT);
+
 		// RENDER
 		triangle.render();
 		requestAnimationFrame(renderLoop);
