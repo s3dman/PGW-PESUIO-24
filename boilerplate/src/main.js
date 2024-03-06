@@ -14,8 +14,18 @@ if (gl === null) {
 	alert("Unable to initialize WebGL.");
 } else {
 	// SHADER
+	const vertexShader = Shader.compileShader(
+		vertexShaderSource,
+		gl.VERTEX_SHADER,
+		gl,
+	);
+	const fragmentShader = Shader.compileShader(
+		fragmentShaderSource,
+		gl.FRAGMENT_SHADER,
+		gl,
+	);
 	const globalShader = new Shader(gl);
-	globalShader.createShaders(vertexShaderSource, fragmentShaderSource);
+	globalShader.createShaders(vertexShader, fragmentShader);
 
 	// DATA
 	const triangle = new Triangle(gl);

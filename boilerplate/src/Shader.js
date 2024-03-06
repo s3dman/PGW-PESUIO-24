@@ -4,16 +4,20 @@ export default class Shader {
 		this.program = null;
 	}
 
-	createShaders(vertexShaderSource, fragmentShaderSource) {
-		const vertexShader = this.compileShader(
-			vertexShaderSource,
-			this.gl.VERTEX_SHADER,
-		);
-		const fragmentShader = this.compileShader(
-			fragmentShaderSource,
-			this.gl.FRAGMENT_SHADER,
-		);
+	static compileShader(source, type, gl) {
+		const shader = gl.createShader(type);
+		gl.shaderSource(shader, source);
+		gl.compileShader(shader);
 
+		if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+			console.error(gl.getShaderInfoLog(shader));
+			return null;
+		}
+
+		return shader;
+	}
+
+	createShaders(vertexShader, fragmentShader) {
 		this.program = this.gl.createProgram();
 
 		this.gl.attachShader(this.program, vertexShader);
@@ -25,18 +29,5 @@ export default class Shader {
 			console.error(this.gl.getProgramInfoLog(this.program));
 			this.gl.deleteProgram(this.program);
 		}
-	}
-
-	compileShader(source, type) {
-		const shader = this.gl.createShader(type);
-		this.gl.shaderSource(shader, source);
-		this.gl.compileShader(shader);
-
-		if (!this.gl.getShaderParameter(shader, this.gl.COMPILE_STATUS)) {
-			console.error(this.gl.getShaderInfoLog(shader));
-			return null;
-		}
-
-		return shader;
 	}
 }
