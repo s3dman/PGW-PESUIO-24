@@ -1,8 +1,8 @@
 import Shader from "./Shader";
-import { Triangle } from "./Model";
+import { Triangle, Square, Frame } from "./Model";
 
 import vertexShaderSource from "./shaders/vert.glsl";
-import fragmentShaderSource from "./shaders/frag.glsl";
+import fragmentShaderSource from "./shaders/frag1.glsl";
 
 const canvas = document.querySelector("#glcanvas");
 canvas.width = window.innerWidth;
@@ -28,17 +28,35 @@ if (gl === null) {
 	globalShader.createShaders(vertexShader, fragmentShader);
 
 	// DATA
-	const triangle = new Triangle(gl);
-	triangle.setup();
+	const frame = new Frame(gl);
+	frame.setup();
+
+	// UNIFORMS
+	const startTime = performance.now();
+	let currentTime, elapsedTime;
+	const uTimeLocation = gl.getUniformLocation(globalShader.program, "uTime");
+
+	const resolution = [canvas.width, canvas.height];
+	const uResolutionLocation = gl.getUniformLocation(
+		globalShader.program,
+		"uResolution",
+	);
 
 	gl.useProgram(globalShader.program);
 
-	gl.clearColor(0, 0, 0, 1);
+	gl.uniform2fv(uResolutionLocation, resolution);
+
+	gl.clearColor(1, 1, 1, 0);
 	function renderLoop() {
 		gl.clear(gl.COLOR_BUFFER_BIT);
 
+		// UPDATE
+		currentTime = performance.now();
+		elapsedTime = (currentTime - startTime) / 1000;
+		gl.uniform1f(uTimeLocation, elapsedTime);
+
 		// RENDER
-		triangle.render();
+		frame.render();
 		requestAnimationFrame(renderLoop);
 	}
 
