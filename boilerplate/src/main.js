@@ -1,8 +1,8 @@
 import Shader from "./Shader";
-import { Triangle, Square, Frame } from "./Model";
+import { Triangle, Square, Frame, Mesh } from "./Model";
 
 import vertexShaderSource from "./shaders/vert.glsl";
-import fragmentShaderSource from "./shaders/frag1.glsl";
+import fragmentShaderSource from "./shaders/frag.glsl";
 
 const canvas = document.querySelector("#glcanvas");
 canvas.width = window.innerWidth;
@@ -28,8 +28,8 @@ if (gl === null) {
 	globalShader.createShaders(vertexShader, fragmentShader);
 
 	// DATA
-	const frame = new Frame(gl);
-	frame.setup();
+	const rdata = new Square(gl);
+	rdata.setup();
 
 	// UNIFORMS
 	const startTime = performance.now();
@@ -56,7 +56,7 @@ if (gl === null) {
 		gl.uniform1f(uTimeLocation, elapsedTime);
 
 		// RENDER
-		frame.render();
+		rdata.render();
 		requestAnimationFrame(renderLoop);
 	}
 
