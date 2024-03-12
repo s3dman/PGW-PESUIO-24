@@ -134,6 +134,6 @@ export class Mesh extends Model {
 
 	render() {
 		this.gl.bindVertexArray(this.vao);
-		this.gl.drawArrays(this.gl.TRIANGLE, 0, 25 * 3);
+		this.gl.drawArrays(this.gl.TRIANGLES, 0, 25 * 3);
 	}
 }

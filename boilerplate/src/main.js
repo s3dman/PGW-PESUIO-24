@@ -2,7 +2,7 @@ import Shader from "./Shader";
 import { Triangle, Square, Frame, Mesh } from "./Model";
 
 import vertexShaderSource from "./shaders/vert.glsl";
-import fragmentShaderSource from "./shaders/frag.glsl";
+import fragmentShaderSource from "./shaders/frag1.glsl";
 
 const canvas = document.querySelector("#glcanvas");
 canvas.width = window.innerWidth;
@@ -28,7 +28,7 @@ if (gl === null) {
 	globalShader.createShaders(vertexShader, fragmentShader);
 
 	// DATA
-	const rdata = new Square(gl);
+	const rdata = new Triangle(gl);
 	rdata.setup();
 
 	// UNIFORMS
