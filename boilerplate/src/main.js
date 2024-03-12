@@ -2,7 +2,7 @@ import Shader from "./Shader";
 import { Triangle, Square, Frame, Mesh } from "./Model";
 
 import vertexShaderSource from "./shaders/vert.glsl";
-import fragmentShaderSource from "./shaders/frag1.glsl";
+import fragmentShaderSource from "./shaders/frag.glsl";
 
 const canvas = document.querySelector("#glcanvas");
 canvas.width = window.innerWidth;
