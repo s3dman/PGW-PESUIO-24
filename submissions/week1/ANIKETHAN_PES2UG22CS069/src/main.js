@@ -1,5 +1,6 @@
 import Shader from "./Shader";
-import { Triangle, Square, Frame, Mesh, Circle} from "./Model";
+import { Triangle, Square, Frame, Mesh, Hexagone} from "./Model";
+import { keys, mouseX, mouseY } from "./Input";
 
 import vertexShaderSource from "./shaders/vert.glsl";
 import fragmentShaderSource from "./shaders/frag.glsl";
@@ -28,7 +29,7 @@ if (gl === null) {
 	globalShader.createShaders(vertexShader, fragmentShader);
 
 	// DATA
-	const rdata = new Circle(gl);
+	const rdata = new Hexagone(gl);
 	rdata.setup();
 
 	// UNIFORMS
@@ -42,11 +43,25 @@ if (gl === null) {
 		"uResolution",
 	);
 
-	gl.useProgram(globalShader.program);
+	const uMouseLocation = gl.getUniformLocation(
+		globalShader.program,
+		"uMouse",
+	);
 
+	let posX = 0;
+	let posY = 0;
+	function updatePos(movementSpeed) {
+		if (keys[72]) posX -= movementSpeed;
+		if (keys[76]) posX += movementSpeed;
+		if (keys[75]) posY += movementSpeed;
+		if (keys[74]) posY -= movementSpeed;
+	}
+	const uPosLocation = gl.getUniformLocation(globalShader.program, "uPos");
+
+	gl.useProgram(globalShader.program);
 	gl.uniform2fv(uResolutionLocation, resolution);
 
-	gl.clearColor(1, 1, 1, 0);
+	gl.clearColor(0.5, 0.5, 0.5, 1);
 	function renderLoop() {
 		gl.clear(gl.COLOR_BUFFER_BIT);
 
@@ -54,6 +69,15 @@ if (gl === null) {
 		currentTime = performance.now();
 		elapsedTime = (currentTime - startTime) / 1000;
 		gl.uniform1f(uTimeLocation, elapsedTime);
+
+		updatePos(0.01);
+		gl.uniform2f(uPosLocation, posX, posY);
+
+		gl.uniform2f(
+			uMouseLocation,
+			mouseX / resolution[0] - 0.5,
+			0.5 - mouseY / resolution[1],
+		);
 
 		// RENDER
 		rdata.render();

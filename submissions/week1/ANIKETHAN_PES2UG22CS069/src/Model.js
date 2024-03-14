@@ -7,8 +7,8 @@ export default class Model {
 export class Triangle extends Model {
 	setup() {
 		const data = new Float32Array([
-			-0.2, -0.2, 0.0, 0.0, 0.0, 1.0, 0.2, -0.2, 0.0, 0.0, 1.0, 0.0, 0.0,
-			0.2, 0.0, 1.0, 0.0, 0.0,
+			-0.2, -0.2, 0.0, 0.0, 0.0, 0.0, 0.2, -0.2, 0.0, 0.0, 0.0, 0.0, 0.0,
+			0.2, 0.0, 0.0, 0.0, 0.0,
 		]);
 
 		this.vbo = this.gl.createBuffer();
@@ -35,12 +35,22 @@ export class Triangle extends Model {
 export class Square extends Model {
 	setup() {
 		const pos = new Float32Array([
-			-0.5, -0.5, 0.0, 0.5, -0.5, 0.0, 0.5, 0.5, 0.0, -0.5, -0.5, 0.0,
-			0.5, 0.5, 0.0, -0.5, 0.5, 0.0,
+			-0.5, -0.5, 0.0, 
+			0.5, -0.5, 0.0, 
+			0.5, 0.5, 0.0, 
+			
+			-0.5, -0.5, 0.0,
+			0.5, 0.5, 0.0, 
+			-0.5, 0.5, 0.0,
 		]);
 		const col = new Float32Array([
-			1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0,
-			0.0, 1.0, 1.0, 1.0, 0.0,
+			1.0, 0.0, 0.0, 
+			0.0, 1.0, 0.0, 
+			0.0, 0.0, 1.0, 
+			
+			1.0, 0.0, 0.0, 
+			0.0,0.0, 1.0, 
+			1.0, 1.0, 0.0,
 		]);
 		
 		this.vao = this.gl.createVertexArray();
@@ -87,42 +97,68 @@ export class Frame extends Model {
 	}
 }
 
-export class Circle extends Model {
+
+export class Hexagone extends Model {
 	setup() {
-		const res = 12;
-		let index = 3;
-		const data = new Float32Array(13*3);
-		data.set(
-			[0.0,0.0, 0.0],
-			0,
-		);
-		for(let i=0; i < 12; i++){
-			data.set(
-				[Math.cos(360/i)/2,Math.sin(360/i)/2, 0.0],
-				index,
-			);
-			index += 3;
-		}
-		this.vbo = this.gl.createBuffer();
-		this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.vbo);
+		const pos = new Float32Array([
+			0.0, 0.5, 0.0, 
+			-0.25, 0.25, 0.0, 
+			0.25, 0.25, 0.0, 
+			
+			-0.25, 0.25, 0.0,
+			0.25, 0.25, 0.0,
+			-0.25, -0.25, 0.0, 
 
-		this.gl.bufferData(this.gl.ARRAY_BUFFER, data, this.gl.STATIC_DRAW);
+			-0.25,-0.25,0.0,
+			0.25,-0.25,0.0,
+			0.25,0.25,0.0,
 
+			-0.25,-0.25,0.0,
+			0.0,-0.5,0.0,
+			0.25,-0.25,0.0,
+		]);
+
+		const col = new Float32Array([
+			1.0, 0.0, 0.0,
+			0.0, 1.0, 0.0,
+			0.0, 0.0, 1.0,
+
+			0.0, 0.0, 1.0,
+			1.0, 0.0, 0.0,
+			0.0, 1.0, 0.0,
+
+			0.0, 1.0, 0.0,
+			0.0, 0.0, 1.0,
+			1.0, 0.0, 0.0,
+
+			1.0, 0.0, 0.0,
+			0.0, 1.0, 0.0,
+			0.0, 0.0, 1.0,
+		])
+
+		
 		this.vao = this.gl.createVertexArray();
 		this.gl.bindVertexArray(this.vao);
-
+		
+		this.positionBuffer = this.gl.createBuffer();
+		this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.positionBuffer);
+		this.gl.bufferData(this.gl.ARRAY_BUFFER, pos, this.gl.STATIC_DRAW);
 		this.gl.enableVertexAttribArray(0);
 		this.gl.vertexAttribPointer(0, 3, this.gl.FLOAT, false, 0, 0);
 
-		// this.gl.enableVertexAttribArray(1);
-		// this.gl.vertexAttribPointer(1, 3, this.gl.FLOAT, false, 24, 12);
+		this.colorBuffer = this.gl.createBuffer();
+		this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.colorBuffer);
+		this.gl.bufferData(this.gl.ARRAY_BUFFER, col, this.gl.STATIC_DRAW);
+		this.gl.enableVertexAttribArray(1);
+		this.gl.vertexAttribPointer(1, 3, this.gl.FLOAT, false, 0, 0);
+		
 	}
-
 	render() {
 		this.gl.bindVertexArray(this.vao);
-		this.gl.drawArrays(this.gl.LINES, 0, 13);
+		this.gl.drawArrays(this.gl.TRIANGLES, 0, 12);
 	}
 }
+
 export class Mesh extends Model {
 	setup() {
 		const trianglesPerSide = 5;
