@@ -1,13 +1,13 @@
 import Shader from "./Shader";
 import Texture from "./Texture";
-import { Triangle, TexMap, Mesh } from "./Model";
+import { TexMap } from "./Model";
 import { keys, mouseX, mouseY } from "./Input";
 
 import vertexShaderSource from "./shaders/vert.glsl";
 import fragmentShaderSource from "./shaders/texture.glsl";
 
-import sampleTexture from "./tex0.jpg";
-// import sampleTexture from "./tex1.png";
+// import sampleTexture from "./tex0.jpg";
+import sampleTexture from "./tex1.png";
 
 const canvas = document.querySelector("#glcanvas");
 canvas.width = window.innerWidth;
@@ -71,7 +71,7 @@ if (gl === null) {
 	gl.useProgram(globalShader.program);
 	gl.uniform2fv(uResolutionLocation, resolution);
 
-	gl.clearColor(0, 0, 0, 1);
+	gl.clearColor(1, 1, 1, 1);
 	function renderLoop() {
 		gl.clear(gl.COLOR_BUFFER_BIT);
 
