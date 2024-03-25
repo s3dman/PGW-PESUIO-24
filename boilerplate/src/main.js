@@ -4,10 +4,10 @@ import { Triangle, TexMap, Mesh } from "./Model";
 import { keys, mouseX, mouseY } from "./Input";
 
 import vertexShaderSource from "./shaders/vert.glsl";
-import fragmentShaderSource from "./shaders/test.glsl";
+import fragmentShaderSource from "./shaders/texture.glsl";
 
-import sampleTexture from "./tex.jpg";
-// import sampleTexture from "./tex2.png";
+import sampleTexture from "./tex0.jpg";
+// import sampleTexture from "./tex1.png";
 
 const canvas = document.querySelector("#glcanvas");
 canvas.width = window.innerWidth;
