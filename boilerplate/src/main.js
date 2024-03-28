@@ -6,8 +6,8 @@ import { keys, mouseX, mouseY } from "./Input";
 import vertexShaderSource from "./shaders/vert.glsl";
 import fragmentShaderSource from "./shaders/texture.glsl";
 
-// import sampleTexture from "./tex0.jpg";
-import sampleTexture from "./tex1.png";
+import sampleTexture from "./tex0.jpg";
+// import sampleTexture from "./tex1.png";
 
 const canvas = document.querySelector("#glcanvas");
 canvas.width = window.innerWidth;
