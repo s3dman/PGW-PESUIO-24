@@ -4,10 +4,9 @@ import { TexMap } from "./Model";
 import { keys, mouseX, mouseY } from "./Input";
 
 import vertexShaderSource from "./shaders/vert.glsl";
-import fragmentShaderSource from "./shaders/texture.glsl";
+import fragmentShaderSource from "./shaders/post.glsl";
 
-import sampleTexture from "./tex0.jpg";
-// import sampleTexture from "./tex1.png";
+import sampleTexture from "./tex2.jpg";
 
 const canvas = document.querySelector("#glcanvas");
 canvas.width = window.innerWidth;
@@ -68,10 +67,90 @@ if (gl === null) {
 	}
 	const uPosLocation = gl.getUniformLocation(globalShader.program, "uPos");
 
-	gl.useProgram(globalShader.program);
+	const kernels = {
+		normal: [
+			0, 0, 0,
+			0, 1, 0,
+			0, 0, 0,
+		],
+		gaussianBlur: [
+			1, 2, 1,
+			2, 4, 2,
+			1, 2, 1,
+		],
+		unsharpen: [
+			-1, -1, -1,
+			-1, 9, -1,
+			-1, -1, -1,
+		],
+		sharpen: [
+			0, -1, 0,
+			-1, 5, -1,
+			0, -1, 0,
+		],
+		edgeDetect1: [
+			0, -1, 0,
+			-1, 4, -1,
+			0, -1, 0,
+		],
+		edgeDetect2: [
+			-1, -1, -1,
+			-1, 8, -1,
+			-1, -1, -1,
+		],
+		edgeDetect3: [
+			-5, 0, 0,
+			0, 0, 0,
+			0, 0, 5,
+		],
+		edgeDetect4: [
+			-1, -1, -1,
+			0, 0, 0,
+			1, 1, 1,
+		],
+		edgeDetect5: [
+			-1, -1, -1,
+			2, 2, 2,
+			-1, -1, -1,
+		],
+		edgeDetect6: [
+			-5, -5, -5,
+			-5, 39, -5,
+			-5, -5, -5,
+		],
+		boxBlur: [
+			1, 1, 1,
+			1, 1, 1,
+			1, 1, 1,
+		],
+		triangleBlur: [
+			0.0625, 0.125, 0.0625,
+			0.125, 0.25, 0.125,
+			0.0625, 0.125, 0.0625,
+		],
+		emboss: [
+			-2, -1, 0,
+			-1, 1, 1,
+			0, 1, 2,
+		],
+	};
+
+	function computeKernelWeight(kernel) {
+		var weight = kernel.reduce(function(prev, curr) {
+			return prev + curr;
+		});
+		return weight <= 0 ? 1 : weight;
+	}
+	const uKernelLocation = gl.getUniformLocation(globalShader.program, "uKernel");
+	const uKernelWeightLocation = gl.getUniformLocation(globalShader.program, "uKernelWeight");
+	const cc = kernels.emboss;
+	gl.uniform1fv(uKernelLocation, cc);
+	gl.uniform1f(uKernelWeightLocation, computeKernelWeight(cc));
+
 	gl.uniform2fv(uResolutionLocation, resolution);
 
 	gl.clearColor(1, 1, 1, 1);
+
 	function renderLoop() {
 		gl.clear(gl.COLOR_BUFFER_BIT);
 
@@ -88,7 +167,6 @@ if (gl === null) {
 			mouseX / resolution[0] - 0.5,
 			0.5 - mouseY / resolution[1],
 		);
-
 		data.render();
 
 		requestAnimationFrame(renderLoop);
