@@ -4,9 +4,9 @@ import { TexMap } from "./Model";
 import { keys, mouseX, mouseY } from "./Input";
 
 import vertexShaderSource from "./shaders/vert.glsl";
-import fragmentShaderSource from "./shaders/post.glsl";
+import fragmentShaderSource from "./shaders/sdf.glsl";
 
-import sampleTexture from "./tex2.jpg";
+// import sampleTexture from "./tex2.jpg";
 
 const canvas = document.querySelector("#glcanvas");
 canvas.width = window.innerWidth;
@@ -34,8 +34,8 @@ if (gl === null) {
 	data.setup();
 
 	// TEXTURE
-	const texture = new Texture(gl, 0);
-	texture.createTexture(sampleTexture);
+	// const texture = new Texture(gl, 0);
+	// texture.createTexture(sampleTexture);
 
 	gl.useProgram(globalShader.program);
 
@@ -77,6 +77,20 @@ if (gl === null) {
 			1, 2, 1,
 			2, 4, 2,
 			1, 2, 1,
+		],
+		gaus3: [
+			0, 0, 0, 0, 0,
+			0, 1, 2, 1, 0,
+			0, 2, 4, 2, 0,
+			0, 1, 2, 1, 0,
+			0, 0, 0, 0, 0
+		],
+		biggaussianBlur: [
+			0, 1, 2, 1, 0,
+			1, 2, 4, 2, 1,
+			2, 4, 8, 4, 2,
+			1, 2, 4, 2, 1,
+			0, 1, 2, 1, 0
 		],
 		unsharpen: [
 			-1, -1, -1,
@@ -143,7 +157,8 @@ if (gl === null) {
 	}
 	const uKernelLocation = gl.getUniformLocation(globalShader.program, "uKernel");
 	const uKernelWeightLocation = gl.getUniformLocation(globalShader.program, "uKernelWeight");
-	const cc = kernels.emboss;
+
+	const cc = kernels.sharpen;
 	gl.uniform1fv(uKernelLocation, cc);
 	gl.uniform1f(uKernelWeightLocation, computeKernelWeight(cc));
 
