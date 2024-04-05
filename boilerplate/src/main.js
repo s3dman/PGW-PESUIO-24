@@ -1,10 +1,10 @@
 import Shader from "./Shader";
 import Texture from "./Texture";
-import { TexMap } from "./Model";
+import { TexMap, Cube } from "./Model";
 import { keys, mouseX, mouseY } from "./Input";
 
-import vertexShaderSource from "./shaders/vert.glsl";
-import fragmentShaderSource from "./shaders/sdf.glsl";
+import vertexShaderSource from "./shaders/ortho.glsl";
+import fragmentShaderSource from "./shaders/frag.glsl";
 
 // import sampleTexture from "./tex2.jpg";
 
@@ -30,7 +30,7 @@ if (gl === null) {
 	globalShader.createShaders(vert, frag0);
 
 	// DATA
-	const data = new TexMap(gl);
+	const data = new Cube(gl);
 	data.setup();
 
 	// TEXTURE
@@ -159,15 +159,56 @@ if (gl === null) {
 	const uKernelWeightLocation = gl.getUniformLocation(globalShader.program, "uKernelWeight");
 
 	const cc = kernels.sharpen;
+
 	gl.uniform1fv(uKernelLocation, cc);
 	gl.uniform1f(uKernelWeightLocation, computeKernelWeight(cc));
 
+	const uPMLocation = gl.getUniformLocation(globalShader.program, "uPM");
+	const uMVMLocation = gl.getUniformLocation(globalShader.program, "uMVM");
+
+	const fieldOfView = (45 * Math.PI) / 180;
+	const aspect = resolution[0] / resolution[1];
+	const zNear = 0.1;
+	const zFar = 100.0;
+	const projectionMatrix = mat4.create();
+
+	mat4.perspective(projectionMatrix, fieldOfView, aspect, zNear, zFar);
+	const modelViewMatrix = mat4.create();
+	mat4.translate(
+		modelViewMatrix,
+		modelViewMatrix,
+		[-0.0, 0.0, -6.0]
+	);
+	mat4.rotate(
+		modelViewMatrix,
+		modelViewMatrix,
+		(45 * Math.PI) / 180,
+		[0, 1, 1]
+	);
+	mat4.scale(
+		modelViewMatrix,
+		modelViewMatrix,
+		[1, 1, 1]
+	);
+	gl.uniformMatrix4fv(
+		uPMLocation,
+		false,
+		projectionMatrix
+	);
+	gl.uniformMatrix4fv(
+		uMVMLocation,
+		false,
+		modelViewMatrix
+	);
+
 	gl.uniform2fv(uResolutionLocation, resolution);
 
-	gl.clearColor(1, 1, 1, 1);
+	gl.clearDepth(1.0);
+	gl.enable(gl.DEPTH_TEST);
+	gl.depthFunc(gl.LEQUAL);
 
 	function renderLoop() {
-		gl.clear(gl.COLOR_BUFFER_BIT);
+		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
 		// UPDATE
 		currentTime = performance.now();
@@ -189,3 +230,4 @@ if (gl === null) {
 
 	renderLoop();
 }
+
