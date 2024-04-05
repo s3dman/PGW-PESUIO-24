@@ -174,22 +174,26 @@ if (gl === null) {
 
 	mat4.perspective(projectionMatrix, fieldOfView, aspect, zNear, zFar);
 	const modelViewMatrix = mat4.create();
+
 	mat4.translate(
 		modelViewMatrix,
 		modelViewMatrix,
-		[-0.0, 0.0, -6.0]
+		[0.0, 0.0, -5.0]
 	);
-	mat4.rotate(
-		modelViewMatrix,
-		modelViewMatrix,
-		(45 * Math.PI) / 180,
-		[0, 1, 1]
-	);
-	mat4.scale(
-		modelViewMatrix,
-		modelViewMatrix,
-		[1, 1, 1]
-	);
+
+	// mat4.rotate(
+	// 	modelViewMatrix,
+	// 	modelViewMatrix,
+	// 	45.0 * Math.PI / 180,
+	// 	[1, 1, 1]
+	// );
+
+	// mat4.scale(
+	// 	modelViewMatrix,
+	// 	modelViewMatrix,
+	// 	[1.5, 1, 3]
+	// );
+
 	gl.uniformMatrix4fv(
 		uPMLocation,
 		false,
@@ -203,6 +207,8 @@ if (gl === null) {
 
 	gl.uniform2fv(uResolutionLocation, resolution);
 
+
+	gl.clearColor(0, 0, 0, 1);
 	gl.clearDepth(1.0);
 	gl.enable(gl.DEPTH_TEST);
 	gl.depthFunc(gl.LEQUAL);
@@ -222,6 +228,37 @@ if (gl === null) {
 			uMouseLocation,
 			mouseX / resolution[0] - 0.5,
 			0.5 - mouseY / resolution[1],
+		);
+
+		// mat4.rotate(
+		// 	modelViewMatrix,
+		// 	modelViewMatrix,
+		// 	(mouseX / resolution[0] - 0.5) * 2.0 * Math.PI / 180,
+		// 	[1, 0, 0]
+		// );
+		// mat4.rotate(
+		// 	modelViewMatrix,
+		// 	modelViewMatrix,
+		// 	(0.5 - mouseY / resolution[1]) * 2.0 * Math.PI / 180,
+		// 	[0, 1, 0]
+		// );
+		mat4.rotate(
+			modelViewMatrix,
+			modelViewMatrix,
+			(posX) * Math.PI / 180,
+			[1, 0, 0]
+		);
+		mat4.rotate(
+			modelViewMatrix,
+			modelViewMatrix,
+			(posY) * Math.PI / 180,
+			[0, 1, 0]
+		);
+
+		gl.uniformMatrix4fv(
+			uMVMLocation,
+			false,
+			modelViewMatrix
 		);
 		data.render();
 
