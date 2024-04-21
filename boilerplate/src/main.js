@@ -1,12 +1,12 @@
 import Shader from "./Shader";
 import Texture from "./Texture";
-import { TexMap, Cube } from "./Model";
+import { TexMap, Cube, Triangle } from "./Model";
 import { keys, mouseX, mouseY } from "./Input";
 
 import vertexShaderSource from "./shaders/ortho.glsl";
-import fragmentShaderSource from "./shaders/frag.glsl";
+import fragmentShaderSource from "./shaders/texture.glsl";
 
-// import sampleTexture from "./tex2.jpg";
+import sampleTexture from "./tex2.jpg";
 
 const canvas = document.querySelector("#glcanvas");
 canvas.width = window.innerWidth;
@@ -30,12 +30,12 @@ if (gl === null) {
 	globalShader.createShaders(vert, frag0);
 
 	// DATA
-	const data = new Cube(gl);
+	const data = new TexMap(gl);
 	data.setup();
 
 	// TEXTURE
-	// const texture = new Texture(gl, 0);
-	// texture.createTexture(sampleTexture);
+	const texture = new Texture(gl, 0);
+	texture.createTexture(sampleTexture);
 
 	gl.useProgram(globalShader.program);
 

@@ -143,6 +143,9 @@ export class TexMap extends Model {
 			-1.0, -1.0, 0.0, 0.0, 0.0,
 			1.0, 1.0, 0.0, 1.0, 1.0,
 			-1.0, 1.0, 0.0, 0.0, 1.0,
+			0.0, -1.0, 1.0, 0.0, 0.0,
+			1.0, 1.0, 1.0, 1.0, 1.0,
+			0.0, 1.0, 1.0, 0.0, 1.0,
 		]);
 
 		this.vbo = this.gl.createBuffer();
@@ -161,7 +164,7 @@ export class TexMap extends Model {
 	}
 	render() {
 		this.gl.bindVertexArray(this.vao);
-		this.gl.drawArrays(this.gl.TRIANGLES, 0, 6);
+		this.gl.drawArrays(this.gl.TRIANGLES, 0, 9);
 	}
 }
 
